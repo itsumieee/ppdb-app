@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pagination Styling */
+.pagination {
+    @apply flex justify-center items-center gap-1;
+}
+
+.pagination .page-item {
+    @apply rounded-lg overflow-hidden;
+}
+
+.pagination .page-link {
+    @apply px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-200 transition;
+}
+
+.pagination .active .page-link {
+    @apply bg-blue-600 text-white hover:bg-blue-700;
+}
