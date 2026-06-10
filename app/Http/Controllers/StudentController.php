@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Registration;
 use App\Models\Payment;
 use App\Models\Jurusan;
@@ -38,11 +39,14 @@ class StudentController extends Controller
         return redirect()->route('student.beranda');
     }
 
-    // ==================== FORMULIR PENDAFTARAN ====================
-    public function createRegistration()
+    // ==================== PENDAFTARAN PUBLIK & AUTHENTICATED ====================
+    public function showRegistrationForm()
     {
-        if (Auth::user()->registration) {
-            return redirect()->route('student.dashboard')->with('error', 'Anda sudah mendaftar.');
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user->registration) {
+                return redirect()->route('student.status')->with('info', 'Anda sudah melakukan pendaftaran.');
+            }
         }
         $jurusan = Jurusan::where('is_active', true)->get();
         return view('student.register', compact('jurusan'));
@@ -50,10 +54,13 @@ class StudentController extends Controller
 
     public function storeRegistration(Request $request)
     {
-        $request->validate([
+        $isPublic = !auth()->check();
+
+        // Validation rules
+        $rules = [
             'full_name' => 'required|string|max:255',
-            'nisn' => 'required|string|size:10|unique:registrations,nisn',
-            'nik' => 'required|string|size:16|unique:registrations,nik',
+            'nik' => 'required|string|size:16|unique:users,nik|unique:registrations,nik',
+            'nisn' => 'nullable|string|size:10|unique:registrations,nisn',
             'place_of_birth' => 'required|string',
             'date_of_birth' => 'required|date',
             'gender' => 'required|in:L,P',
@@ -62,12 +69,50 @@ class StudentController extends Controller
             'phone' => 'required|string|max:15',
             'previous_school' => 'required|string',
             'major_choice' => 'required|exists:jurusan,kode',
-        ]);
+        ];
 
+        // Add password validation only for public registration
+        if ($isPublic) {
+            $rules['password'] = 'required|string|min:8|confirmed';
+        }
+
+        $request->validate($rules);
+
+        // Create user if public registration, otherwise use authenticated user
+        if ($isPublic) {
+            $user = User::create([
+                'name' => $request->full_name,
+                'nik' => $request->nik,
+                'email' => $request->nik . '@temp.ppdb.com',
+                'password' => Hash::make($request->password),
+                'role' => 'student',
+                'gender' => $request->gender,
+                'religion' => $request->religion,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'nisn' => $request->nisn,
+            ]);
+
+            Auth::login($user);
+        } else {
+            $user = Auth::user();
+            
+            // Update user profile if authenticated
+            $user->update([
+                'gender' => $request->gender,
+                'religion' => $request->religion,
+                'address' => $request->address,
+                'phone' => $request->phone,
+                'nisn' => $request->nisn,
+            ]);
+        }
+
+        // Generate nomor pendaftaran
         $registrationNumber = 'PPDB-' . date('Ymd') . '-' . strtoupper(uniqid());
 
-        $registration = Registration::create([
-            'user_id' => Auth::id(),
+        // Create registration
+        Registration::create([
+            'user_id' => $user->id,
             'registration_number' => $registrationNumber,
             'full_name' => $request->full_name,
             'nisn' => $request->nisn,
@@ -83,7 +128,17 @@ class StudentController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('student.upload.index')->with('success', 'Data pendaftaran berhasil. Silakan upload berkas.');
+        return redirect()->route('student.beranda')->with('success', 'Pendaftaran berhasil! Silakan upload berkas melalui menu Upload Berkas.');
+    }
+
+    // ==================== AUTHENTICATED REGISTRATION FORM ====================
+    public function createRegistration()
+    {
+        if (Auth::user()->registration) {
+            return redirect()->route('student.dashboard')->with('error', 'Anda sudah mendaftar.');
+        }
+        $jurusan = Jurusan::where('is_active', true)->get();
+        return view('student.register', compact('jurusan'));
     }
 
     // ==================== UPLOAD BERKAS ====================

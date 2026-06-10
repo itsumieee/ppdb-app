@@ -20,6 +20,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route untuk pendaftaran publik (tanpa auth)
+Route::get('/daftar', [StudentController::class, 'showRegistrationForm'])->name('student.showRegister');
+Route::post('/daftar', [StudentController::class, 'storeRegistration'])->name('student.register.store');
+
 // Route untuk semua user yang sudah login
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -136,5 +140,5 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::get('/register', function () {
-    return view('auth.split');
+    return redirect()->route('student.showRegister');
 })->name('register');

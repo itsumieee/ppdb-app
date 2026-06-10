@@ -79,3 +79,15 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+<script>
+    // Auto-refresh halaman setiap 3 detik untuk cek status terbaru
+    // Hanya untuk status pending (menunggu pembayaran)
+    @if($payment->transaction_status == 'pending')
+        setTimeout(function() {
+            window.location.reload();
+        }, 3000);
+    @endif
+</script>
+@endsection

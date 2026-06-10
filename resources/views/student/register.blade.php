@@ -17,7 +17,7 @@
             </div>
         @endif
 
-        <form action="{{ route('student.store.register') }}" method="POST">
+        <form action="{{ auth()->check() ? route('student.store.register') : route('student.register.store') }}" method="POST">
             @csrf
             <div class="grid md:grid-cols-2 gap-4">
                 <div>
@@ -68,14 +68,25 @@
                     <input type="text" name="previous_school" value="{{ old('previous_school') }}" class="w-full border rounded-lg px-3 py-2" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium">Jurusan Pilihan</label>
-                    <select name="major_choice" class="w-full border rounded-lg px-3 py-2" required>
-                        <option value="">-- Pilih Jurusan --</option>
-                        @foreach($jurusan as $j)
-                            <option value="{{ $j->kode }}" {{ old('major_choice') == $j->kode ? 'selected' : '' }}>{{ $j->nama }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                     <label class="block text-sm font-medium">Jurusan Pilihan</label>
+                     <select name="major_choice" class="w-full border rounded-lg px-3 py-2" required>
+                         <option value="">-- Pilih Jurusan --</option>
+                         @foreach($jurusan as $j)
+                             <option value="{{ $j->kode }}" {{ old('major_choice') == $j->kode ? 'selected' : '' }}>{{ $j->nama }}</option>
+                         @endforeach
+                     </select>
+                 </div>
+                 @if(!auth()->check())
+                 <div>
+                     <label class="block text-sm font-medium">Password *</label>
+                     <input type="password" name="password" class="w-full border rounded-lg px-3 py-2" minlength="8" required>
+                     <small class="text-gray-500">Minimal 8 karakter</small>
+                 </div>
+                 <div>
+                     <label class="block text-sm font-medium">Konfirmasi Password *</label>
+                     <input type="password" name="password_confirmation" class="w-full border rounded-lg px-3 py-2" minlength="8" required>
+                 </div>
+                 @endif
             </div>
             <div class="mt-6 flex justify-end">
                 <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Simpan & Lanjut Upload</button>
