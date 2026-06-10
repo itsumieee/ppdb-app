@@ -43,14 +43,14 @@
                 <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">NIK (16 digit)</label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                <i class="fas fa-envelope"></i>
+                                <i class="fas fa-id-card"></i>
                             </span>
-                            <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                            <input type="text" name="nik" value="{{ old('nik') }}" required autofocus maxlength="16"
                                 class="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent transition shadow-sm"
-                                placeholder="contoh@email.com">
+                                placeholder="1234567890123456">
                         </div>
                     </div>
 
