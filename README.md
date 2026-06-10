@@ -1,4 +1,3 @@
-Berikut adalah file **README.md** yang siap Anda copy dan tempelkan ke repository GitHub `https://github.com/itsumieee/ppdb-app`. File ini berisi deskripsi lengkap proyek, fitur, teknologi, instalasi, dan kredensial, dengan tampilan modern dan profesional.
 
 ---
 
@@ -172,8 +171,8 @@ Distribusikan di bawah lisensi **MIT**. Lihat file [LICENSE](https://github.com/
 
 <p align="center">
   <a href="https://github.com/itsumieee"><img src="https://img.shields.io/badge/GitHub-itsumieee-181717?style=flat-square&logo=github"></a>
-  <a href="mailto:itsumieee@gmail.com"><img src="https://img.shields.io/badge/Email-itsumieee@gmail.com-D14836?style=flat-square&logo=gmail"></a>
-  <a href="https://www.linkedin.com/in/zumi/"><img src="https://img.shields.io/badge/LinkedIn-zumi-0077B5?style=flat-square&logo=linkedin"></a>
+  <a href="mailto:gumicool2@gmail.com"><img src="https://img.shields.io/badge/Email-gumicool2@gmail.com-D14836?style=flat-square&logo=gmail"></a>
+  <a href="https://www.linkedin.com/in/zumieee/"><img src="https://img.shields.io/badge/LinkedIn-zumieee-0077B5?style=flat-square&logo=linkedin"></a>
   <a href="https://www.instagram.com/itsumieee/"><img src="https://img.shields.io/badge/Instagram-itsumieee-E4405F?style=flat-square&logo=instagram"></a>
 </p>
 
